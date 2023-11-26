@@ -9,15 +9,15 @@ terraform {
 provider "kubernetes" {
   config_path = "~/.kube/config"
 }
-resource "kubernetes_namespace" "test" {
+resource "kubernetes_namespace" "devops-tools" {
   metadata {
     name = "nginx"
   }
 }
-resource "kubernetes_deployment" "test" {
+resource "kubernetes_deployment" "devops-tools" {
   metadata {
     name      = "nginx"
-    namespace = kubernetes_namespace.test.metadata.0.name
+    namespace = kubernetes_namespace.devops-tools.metadata.0.name
   }
   spec {
     replicas = 2
@@ -44,14 +44,14 @@ resource "kubernetes_deployment" "test" {
     }
   }
 }
-resource "kubernetes_service" "test" {
+resource "kubernetes_service" "devops-tools" {
   metadata {
     name      = "nginx"
-    namespace = kubernetes_namespace.test.metadata.0.name
+    namespace = kubernetes_namespace.devops-tools.metadata.0.name
   }
   spec {
     selector = {
-      app = kubernetes_deployment.test.spec.0.template.0.metadata.0.labels.app
+      app = kubernetes_deployment.devops-tools.spec.0.template.0.metadata.0.labels.app
     }
     type = "NodePort"
     port {
